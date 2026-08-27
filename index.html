@@ -156,9 +156,14 @@
     top:0; left:0;
     height:100%;
     width:0%;
-    border-radius:999px;
+    /* 왼쪽 끝만 둥글게: 오른쪽은 목표(scale)에 도달하기 전까지는 각지게 끊겨야
+       자연스러움 (트랙 끝까지 채워졌을 때만 .full로 오른쪽도 둥글게 처리) */
+    border-radius:999px 0 0 999px;
     background:#ffffff;
     transition:width 1.4s cubic-bezier(.22,1,.36,1);
+  }
+  .bar-fill.full{
+    border-radius:999px;
   }
   .current-marker{
     position:absolute;
@@ -466,7 +471,9 @@
   }
 
   function updateBarFill(){
-    barFill.style.width = window.FollowerData.fillPercent(target) + '%';
+    var percent = window.FollowerData.fillPercent(target);
+    barFill.style.width = percent + '%';
+    barFill.classList.toggle('full', percent >= 100);
     updateCurrentMarker();
   }
 
