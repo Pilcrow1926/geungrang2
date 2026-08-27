@@ -53,6 +53,25 @@
     background:linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 72%, var(--bg-3) 100%);
     background-attachment:fixed;
     position:relative;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(255,255,255,0.7) transparent;
+  }
+
+  /* ---------- custom scrollbar ---------- */
+  ::-webkit-scrollbar{
+    width:10px;
+  }
+  ::-webkit-scrollbar-track{
+    background:transparent;
+  }
+  ::-webkit-scrollbar-thumb{
+    background-color:rgba(255,255,255,0.7);
+    border-radius:999px;
+    border:2px solid transparent;
+    background-clip:padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover{
+    background-color:rgba(255,255,255,0.9);
   }
 
   .hero{
