@@ -5,7 +5,7 @@
 (function () {
   "use strict";
 
-  var WORKER_URL = "https://YOUR_WORKER_URL.workers.dev"; // 배포한 Cloudflare Worker 주소로 교체
+  var WORKER_URL = "https://geungrang2.pilcrow1926.workers.dev/";
   var POLL_INTERVAL_MS = 30000; // 30초마다 갱신 (프록시 캐시와 맞춰서 너무 짧게 하지 마세요)
 
   if (!WORKER_URL || WORKER_URL.indexOf("YOUR_WORKER_URL") !== -1) {
