@@ -45,23 +45,25 @@
   }
 
   body{
-    min-height:100vh;
     font-family:var(--font-body);
     font-weight:600;
     color:#ffffff;
     background:linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 72%, var(--bg-3) 100%);
     background-attachment:fixed;
+    position:relative;
+  }
+
+  .hero{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
     display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-    position:relative;
     padding:32px 20px;
   }
 
   main{
-    position:relative;
-    z-index:2;
     width:min(520px, 90vw);
     text-align:center;
     display:flex;
@@ -255,17 +257,20 @@
 
   /* ---------- timeline ---------- */
   .timeline-section{
+    position:relative;
+    z-index:2;
     width:min(480px, 88vw);
+    margin:0 auto;
     max-height:0;
     opacity:0;
     overflow:hidden;
-    margin-top:0;
-    transition:max-height .8s ease, opacity .6s ease .1s, margin-top .8s ease;
+    padding-top:0;
+    transition:max-height .8s ease, opacity .6s ease .1s, padding-top .8s ease;
   }
   .timeline-section.show{
     max-height:600px;
     opacity:1;
-    margin-top:50px;
+    padding-top:10px;
   }
   .timeline-title{
     font-size:0.85rem;
@@ -330,6 +335,7 @@
 
   <canvas id="confetti-canvas"></canvas>
 
+  <section class="hero">
   <main>
     <div class="avatar-wrap">
       <div class="avatar">
@@ -360,25 +366,26 @@
       <button id="celebrateBtn" aria-label="축하하기">🎉</button>
       <button id="nextBtn">다음은..? →</button>
     </div>
-
-    <!-- <section class="timeline-section" id="timelineSection">
-      <p class="timeline-title">TIMELINE</p>
-      <div class="timeline-list">
-        <div class="timeline-item">
-          <div class="timeline-date">2026.06.23</div>
-          <div class="timeline-desc">///</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-date">2026.08.06</div>
-          <div class="timeline-desc">50팔 달성!</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-date">2026.08.27</div>
-          <div class="timeline-desc">100팔 달성!</div>
-        </div>
-      </div>
-    </section> -->
   </main>
+  </section>
+
+  <section class="timeline-section" id="timelineSection">
+    <p class="timeline-title">TIMELINE</p>
+    <div class="timeline-list">
+      <div class="timeline-item">
+        <div class="timeline-date">2026.06.23</div>
+        <div class="timeline-desc">///</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026.08.06</div>
+        <div class="timeline-desc">50팔 달성!</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026.08.27</div>
+        <div class="timeline-desc">100팔 달성!</div>
+      </div>
+    </div>
+  </section>
 
 <script>
 (function(){
