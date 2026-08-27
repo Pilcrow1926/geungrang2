@@ -93,9 +93,14 @@
     font-size:4rem;
     color:#1b6fa8;
   }
-  /* 실제 사진으로 교체하려면 위 .avatar 안의 <span>을
-     <img src="assets/streamer-photo.png" alt="긍랑" style="width:100%;height:100%;object-fit:cover;">
-     로 바꿔주세요 */
+  .avatar-photo{
+    display:none;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  /* assets/geungrang2.png 파일이 있으면 자동으로 사진이 뜨고,
+     없으면 위 "긍" 글자가 대신 보여요 */
   .name{
     font-family:var(--font-title);
     font-weight:400;
@@ -113,9 +118,9 @@
   .bar-track{
     position:relative;
     width:100%;
-    height:46px;
+    height:26px;
     border-radius:999px;
-    border:3px solid #ffffff;
+    border:2px solid #ffffff;
     background:rgba(255,255,255,0.14);
     overflow:hidden;
   }
@@ -224,25 +229,91 @@
   }
 
   /* ---------- toast ---------- */
+  .toast-slot{
+    height:34px;
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
   .toast{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%) scale(0.6);
+    transform:translateY(6px) scale(0.85);
     font-family:var(--font-title);
-    font-size:clamp(1.6rem,6vw,2.4rem);
+    font-size:1.4rem;
     color:#ffffff;
-    text-shadow:0 4px 30px rgba(0,40,30,0.4), 0 0 40px rgba(255,255,255,0.5);
+    text-shadow:0 4px 20px rgba(0,40,30,0.3), 0 0 24px rgba(255,255,255,0.4);
     opacity:0;
     pointer-events:none;
-    z-index:20;
-    transition:transform .5s cubic-bezier(.34,1.56,.64,1), opacity .5s ease;
+    transition:transform .45s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
     white-space:nowrap;
     text-align:center;
   }
   .toast.show{
-    transform:translate(-50%,-50%) scale(1);
+    transform:translateY(0) scale(1);
     opacity:1;
+  }
+
+  /* ---------- timeline ---------- */
+  .timeline-section{
+    width:min(480px, 88vw);
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    margin-top:0;
+    transition:max-height .8s ease, opacity .6s ease .1s, margin-top .8s ease;
+  }
+  .timeline-section.show{
+    max-height:600px;
+    opacity:1;
+    margin-top:50px;
+  }
+  .timeline-title{
+    font-size:0.85rem;
+    letter-spacing:0.16em;
+    opacity:0.8;
+    margin:0 0 20px;
+    text-align:center;
+  }
+  .timeline-list{
+    position:relative;
+    text-align:left;
+    padding-left:24px;
+    padding-bottom:40px;
+  }
+  .timeline-list::before{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:6px;
+    bottom:10px;
+    width:2px;
+    background:rgba(255,255,255,0.45);
+  }
+  .timeline-item{
+    position:relative;
+    padding-bottom:26px;
+  }
+  .timeline-item:last-child{
+    padding-bottom:0;
+  }
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-24px;
+    top:4px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#ffffff;
+    box-shadow:0 0 0 4px rgba(255,255,255,0.25);
+  }
+  .timeline-date{
+    font-size:0.85rem;
+    opacity:0.85;
+    margin-bottom:4px;
+  }
+  .timeline-desc{
+    font-size:1.05rem;
   }
 
   canvas#confetti-canvas{
@@ -258,11 +329,15 @@
 <body>
 
   <canvas id="confetti-canvas"></canvas>
-  <div class="toast" id="toast">🎉 축하합니다! 🎉</div>
 
   <main>
     <div class="avatar-wrap">
-      <div class="avatar"><span>긍</span></div>
+      <div class="avatar">
+        <span id="avatarFallback">긍</span>
+        <img id="avatarPhoto" class="avatar-photo" src="assets/geungrang2.png" alt="긍랑"
+             onload="document.getElementById('avatarFallback').style.display='none'; this.style.display='block';"
+             onerror="this.style.display='none';">
+      </div>
     </div>
 
     <h1 class="name">긍랑</h1>
@@ -277,10 +352,32 @@
       </div>
     </div>
 
+    <div class="toast-slot">
+      <div class="toast" id="toast">🎉 축하합니다! 🎉</div>
+    </div>
+
     <div class="actions">
       <button id="celebrateBtn" aria-label="축하하기">🎉</button>
       <button id="nextBtn">다음은..? →</button>
     </div>
+
+    <section class="timeline-section" id="timelineSection">
+      <p class="timeline-title">TIMELINE</p>
+      <div class="timeline-list">
+        <div class="timeline-item">
+          <div class="timeline-date">2026.06.23</div>
+          <div class="timeline-desc">///</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026.08.06</div>
+          <div class="timeline-desc">50팔 달성!</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2026.08.27</div>
+          <div class="timeline-desc">100팔 달성!</div>
+        </div>
+      </div>
+    </section>
   </main>
 
 <script>
@@ -390,6 +487,7 @@
   /* ---------- celebrate button ---------- */
   var celebrateBtn = document.getElementById('celebrateBtn');
   var nextBtn = document.getElementById('nextBtn');
+  var timelineSection = document.getElementById('timelineSection');
   var hasCelebrated = false;
 
   celebrateBtn.addEventListener('click', function(){
@@ -405,6 +503,7 @@
     if (!hasCelebrated){
       hasCelebrated = true;
       nextBtn.classList.add('show');
+      timelineSection.classList.add('show');
     }
   });
 
