@@ -457,7 +457,7 @@
   var goalValue = document.getElementById('goalValue');
   var currentMarker = document.getElementById('currentMarker');
   var currentMarkerValue = document.getElementById('currentMarkerValue');
-  var target = window.FollowerData.getCurrent(); // 처음엔 목표 = 현재 값 (바가 꽉 찬 상태)
+  var target = window.FollowerData.getMilestone(); // 첫 화면: 고정된 달성 목표(100)
   var nextTriggered = false;
 
   goalValue.textContent = target;
@@ -492,14 +492,10 @@
   });
 
   // 실시간 팔로워 수(예: chzzk.js)가 바뀌면 여기로 알림이 와요.
+  // target(100 → "다음은..?" 이후엔 150)은 고정값 그대로 두고, 그 스케일 안에서
+  // 현재 실시간 값이 몇 %/몇 명인지만 바·점선에 반영해요.
   window.FollowerData.onChange(function(newCurrent){
     currentMarkerValue.textContent = newCurrent;
-    // "다음은..?"을 아직 누르지 않았다면 목표를 현재 값에 그대로 맞춰서
-    // 바가 항상 꽉 찬 상태로 실시간 성장을 보여줘요.
-    if (!nextTriggered){
-      target = newCurrent;
-      goalValue.textContent = target;
-    }
     updateBarFill();
   });
 
@@ -642,9 +638,10 @@
 
     setTimeout(function(){
       barWrap.classList.remove('shake');
-      // 다음 목표는 FollowerData가 현재 값 기준으로 계산 (current는 그대로 유지)
+      // 목표를 고정된 다음 목표(150)로 전환. 이제부터 바/점선은 그 스케일 안에서
+      // 실시간 현재 팔로워 수(FollowerData.getCurrent())가 어디쯤인지 보여줘요.
       var oldTarget = target;
-      target = window.FollowerData.nextGoal();
+      target = window.FollowerData.getNextGoal();
       tweenGoalLabel(oldTarget, target, 700);
       updateBarFill();
 
