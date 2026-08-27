@@ -1,0 +1,7 @@
+name = "chzzk-follower-proxy"
+main = "worker/chzzk-proxy.js"
+compatibility_date = "2026-08-27"
+
+# CLIENT_ID / CLIENT_SECRET / CHANNEL_ID는 절대 이 파일에 넣지 마세요.
+# Cloudflare 대시보드 > 이 Worker 프로젝트 > Settings > Variables and Secrets 에서
+# "Secret" 타입으로 등록하거나, `wrangler secret put CLIENT_ID` 명령으로 등록하세요.
