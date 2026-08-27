@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>긍랑 팔로우 100 달성 축하</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<!-- 카페24 아네모네체 (제목용) / Pretendard SemiBold (숫자·본문용) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/webfontworld/cafe24/Cafe24Anemone.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/static/pretendard.css">
 <style>
   :root{
     --bg-1:#00ffa3;
     --bg-2:#80e7fc;
     --bg-3:#a9c5ff;
-    --gold:#ffd166;
-    --gold-2:#ffb703;
-    --pink:#ff5da2;
-    --card-bg:rgba(6,24,22,0.42);
-    --card-border:rgba(255,255,255,0.35);
-    --text:#fff8ec;
-    --text-dim:#d9c9ff;
+    --green:#00e08a;
+    --white:#ffffff;
+    --font-title:'Cafe24Anemone','Cafe24Ohsquare',cursive,sans-serif;
+    --font-body:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;
   }
 
   *{box-sizing:border-box;}
@@ -30,271 +31,123 @@
 
   body{
     min-height:100vh;
-    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(circle at 18% 18%, rgba(255,255,255,0.35), transparent 40%),
-      radial-gradient(circle at 85% 20%, rgba(255,255,255,0.22), transparent 40%),
-      radial-gradient(circle at 50% 95%, rgba(0,180,255,0.25), transparent 55%),
-      linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 72%, var(--bg-3) 100%);
+    font-family:var(--font-body);
+    font-weight:600;
+    color:#ffffff;
+    background:linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 72%, var(--bg-3) 100%);
     background-attachment:fixed;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     position:relative;
+    padding:32px 20px;
   }
 
-  /* ambient floating sparkles */
-  .sparkle-field{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:0;
-  }
-  .sparkle{
-    position:absolute;
-    bottom:-10%;
-    font-size:1.4rem;
-    opacity:0;
-    animation:drift linear infinite;
-    filter:drop-shadow(0 0 6px rgba(255,209,102,0.5));
-  }
-  @keyframes drift{
-    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
-    10%{ opacity:0.9; }
-    90%{ opacity:0.7; }
-    100%{ transform:translateY(-115vh) translateX(var(--drift-x,20px)) rotate(360deg); opacity:0; }
-  }
-
-  .card{
+  main{
     position:relative;
     z-index:2;
-    width:min(560px, 92vw);
-    padding:44px 36px 40px;
-    border-radius:28px;
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    backdrop-filter:blur(18px);
-    box-shadow:0 30px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+    width:min(520px, 90vw);
     text-align:center;
-    margin:32px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
 
-  .crown{
-    font-size:2.4rem;
-    display:inline-block;
-    animation:bob 2.4s ease-in-out infinite;
-    filter:drop-shadow(0 0 12px rgba(255,209,102,0.6));
+  /* ---------- avatar ---------- */
+  .avatar-wrap{
+    position:relative;
+    width:180px;
+    height:180px;
+    margin-bottom:22px;
   }
-  @keyframes bob{
-    0%,100%{ transform:translateY(0) rotate(-4deg); }
-    50%{ transform:translateY(-8px) rotate(4deg); }
-  }
-
   .avatar{
-    width:120px;
-    height:120px;
-    margin:10px auto 18px;
+    width:100%;
+    height:100%;
     border-radius:50%;
+    border:5px solid #ffffff;
+    box-shadow:0 12px 30px rgba(0,40,30,0.18);
+    background:linear-gradient(135deg,#dff6ff,#bfe9ff);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:3rem;
-    font-weight:800;
-    color:#3a1466;
-    background:linear-gradient(135deg, var(--gold), var(--pink));
-    box-shadow:0 0 0 5px rgba(255,255,255,0.12), 0 0 40px rgba(255,157,201,0.55);
-    position:relative;
-    user-select:none;
+    overflow:hidden;
   }
-  .avatar::after{
-    content:"";
+  .avatar span{
+    font-family:var(--font-title);
+    font-size:4rem;
+    color:#1b6fa8;
+  }
+  /* 실제 사진으로 교체하려면 위 .avatar 안의 <span>을
+     <img src="assets/streamer-photo.png" alt="긍랑" style="width:100%;height:100%;object-fit:cover;">
+     로 바꿔주세요 */
+  .avatar-badge{
     position:absolute;
-    inset:-10px;
+    right:2px;
+    bottom:10px;
+    width:34px;
+    height:34px;
     border-radius:50%;
-    border:2px dashed rgba(255,209,102,0.55);
-    animation:spin 12s linear infinite;
-  }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
-
-  /* To use a real photo instead of the initial-letter avatar:
-     replace the .avatar <div> below with:
-     <img class="avatar" src="streamer-photo.jpg" alt="긍랑" style="object-fit:cover;"> */
-
-  .streamer-name{
-    font-size:1.05rem;
-    letter-spacing:0.04em;
-    color:var(--text-dim);
-    margin:0 0 6px;
-  }
-
-  h1{
-    margin:0 0 22px;
-    font-size:1.5rem;
-    line-height:1.4;
-    font-weight:800;
-  }
-  h1 .highlight{
-    background:linear-gradient(90deg, var(--gold), var(--pink));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-
-  .counter-wrap{
+    background:#ffffff;
     display:flex;
-    align-items:baseline;
+    align-items:center;
     justify-content:center;
-    gap:10px;
-    margin:8px 0 6px;
+    font-size:16px;
+    box-shadow:0 4px 12px rgba(0,40,30,0.2);
+    animation:twinkle 2.2s ease-in-out infinite;
   }
-  .counter{
-    font-size:clamp(3.2rem, 12vw, 4.6rem);
-    font-weight:900;
-    background:linear-gradient(90deg, var(--gold-2), var(--gold), var(--pink));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    text-shadow:0 0 60px rgba(255,209,102,0.25);
-    font-variant-numeric:tabular-nums;
-  }
-  .counter-label{
-    font-size:1.2rem;
-    font-weight:700;
-    color:var(--text-dim);
+  @keyframes twinkle{
+    0%,100%{ transform:scale(1) rotate(0deg); }
+    50%{ transform:scale(1.15) rotate(12deg); }
   }
 
-  .subtitle{
-    color:var(--text-dim);
-    margin:0 0 32px;
-    font-size:0.98rem;
+  .name{
+    font-family:var(--font-title);
+    font-weight:400;
+    font-size:2.4rem;
+    color:#ffffff;
+    text-shadow:0 4px 14px rgba(0,40,30,0.18);
+    margin:0 0 40px;
   }
 
-  .buttons{
-    display:flex;
-    gap:14px;
-    justify-content:center;
-    flex-wrap:wrap;
+  /* ---------- progress bar ---------- */
+  .bar-wrap{
+    width:100%;
+    margin-bottom:12px;
   }
-
-  button{
-    font-family:inherit;
-    font-size:1.02rem;
-    font-weight:800;
-    padding:15px 26px;
-    border-radius:999px;
-    border:none;
-    cursor:pointer;
-    color:#2c1150;
-    transition:transform .18s ease, box-shadow .18s ease, opacity .3s ease;
-  }
-  button:active{ transform:translateY(1px) scale(0.98); }
-
-  #celebrateBtn{
-    background:linear-gradient(90deg, var(--gold), var(--pink));
-    box-shadow:0 10px 30px rgba(255,141,187,0.45);
-  }
-  #celebrateBtn:hover{ transform:translateY(-2px); box-shadow:0 14px 34px rgba(255,141,187,0.6); }
-
-  #nextBtn{
-    background:linear-gradient(90deg,#8fe3ff,#a78bfa);
-    color:#1b0f3a;
-    box-shadow:0 10px 30px rgba(140,120,255,0.4);
-    opacity:0;
-    transform:scale(0.7) translateY(6px);
-    pointer-events:none;
-  }
-  #nextBtn.show{
-    opacity:1;
-    transform:scale(1) translateY(0);
-    pointer-events:auto;
-  }
-  #nextBtn:hover{ transform:translateY(-2px); }
-  #nextBtn:disabled{
-    opacity:0.55;
-    cursor:default;
-    transform:none !important;
-    box-shadow:none;
-  }
-
-  /* progress section */
-  .progress-section{
-    margin-top:30px;
-    max-height:0;
-    opacity:0;
-    overflow:hidden;
-    transition:max-height .5s ease, opacity .5s ease, margin-top .5s ease;
-  }
-  .progress-section.show{
-    max-height:200px;
-    opacity:1;
-  }
-
-  .progress-title{
-    font-size:0.95rem;
-    color:var(--text-dim);
-    margin-bottom:14px;
-    font-weight:700;
-  }
-
-  .progress-wrap{
+  .bar-track{
     position:relative;
     width:100%;
-    max-width:480px;
-    margin:0 auto;
-    padding-bottom:8px;
-  }
-
-  .progress-track-bg{
-    width:100%;
-    height:38px;
+    height:46px;
     border-radius:999px;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.16);
-    position:relative;
+    border:3px solid #ffffff;
+    background:rgba(255,255,255,0.14);
     overflow:hidden;
   }
-
-  .progress-fill{
+  .bar-fill{
     position:absolute;
     top:0; left:0;
     height:100%;
-    width:100%; /* 100/100 at start */
+    width:0%;
     border-radius:999px;
-    background:linear-gradient(90deg, var(--gold-2), var(--pink));
+    background:#ffffff;
+    transition:width 1.4s cubic-bezier(.22,1,.36,1);
+  }
+  .bar-labels{
     display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    padding-right:14px;
-    box-shadow:0 0 18px rgba(255,157,201,0.6);
-    transition:width 1.1s cubic-bezier(.34,1.56,.64,1);
+    justify-content:space-between;
+    margin-top:10px;
+    padding:0 6px;
+    font-size:1.1rem;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
   }
-  .progress-fill span{
-    font-weight:800;
-    font-size:0.92rem;
-    color:#2c1150;
-    white-space:nowrap;
+  .bar-labels .goal-value{
+    display:inline-block;
+    transition:transform .3s ease;
   }
-
-  .goal-marker{
-    position:absolute;
-    top:50%;
-    right:6px;
-    transform:translateY(-50%) scale(0);
-    background:linear-gradient(90deg,#8fe3ff,#a78bfa);
-    color:#1b0f3a;
-    font-weight:800;
-    font-size:0.78rem;
-    padding:5px 10px;
-    border-radius:999px;
-    white-space:nowrap;
-    box-shadow:0 6px 16px rgba(140,120,255,0.5);
-    transition:transform .4s cubic-bezier(.34,1.56,.64,1) 0.9s;
-  }
-  .goal-marker.show{
-    transform:translateY(-50%) scale(1);
+  .bar-labels .goal-value.bump{
+    transform:scale(1.3);
   }
 
   @keyframes shake{
@@ -306,20 +159,75 @@
     75%{ transform:translateX(-4px); }
     90%{ transform:translateX(3px); }
   }
-  .progress-wrap.shake{
+  .bar-wrap.shake{
     animation:shake 0.6s ease;
   }
 
-  /* toast */
+  /* ---------- buttons ---------- */
+  .actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    justify-content:center;
+    margin-top:28px;
+  }
+  button{
+    font-family:var(--font-body);
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .3s ease;
+  }
+  button:active{ transform:translateY(1px) scale(0.97); }
+
+  #celebrateBtn{
+    width:68px;
+    height:52px;
+    border-radius:26px;
+    font-size:1.6rem;
+    background:var(--green);
+    box-shadow:0 10px 24px rgba(0,60,40,0.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #celebrateBtn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
+
+  #nextBtn{
+    height:52px;
+    padding:0 22px;
+    border-radius:26px;
+    font-size:1rem;
+    background:#ffffff;
+    color:#049966;
+    box-shadow:0 10px 24px rgba(0,60,40,0.2);
+    opacity:0;
+    transform:scale(0.7) translateY(6px);
+    pointer-events:none;
+  }
+  #nextBtn.show{
+    opacity:1;
+    transform:scale(1) translateY(0);
+    pointer-events:auto;
+  }
+  #nextBtn:hover{ transform:translateY(-2px); }
+  #nextBtn:disabled{
+    opacity:0.6;
+    cursor:default;
+    transform:none !important;
+    box-shadow:none;
+  }
+
+  /* ---------- toast ---------- */
   .toast{
     position:fixed;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%) scale(0.6);
+    font-family:var(--font-title);
     font-size:clamp(1.6rem,6vw,2.4rem);
-    font-weight:900;
-    color:var(--gold);
-    text-shadow:0 4px 30px rgba(0,0,0,0.5), 0 0 40px rgba(255,209,102,0.7);
+    color:#ffffff;
+    text-shadow:0 4px 30px rgba(0,40,30,0.4), 0 0 40px rgba(255,255,255,0.5);
     opacity:0;
     pointer-events:none;
     z-index:20;
@@ -340,113 +248,60 @@
     pointer-events:none;
     z-index:15;
   }
-
-  footer{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    color:rgba(6,40,35,0.55);
-    font-size:0.8rem;
-    margin-top:-10px;
-    margin-bottom:24px;
-  }
 </style>
 </head>
 <body>
 
-  <div class="sparkle-field" id="sparkleField"></div>
   <canvas id="confetti-canvas"></canvas>
   <div class="toast" id="toast">🎉 축하합니다! 🎉</div>
 
-  <main class="card">
-    <div class="crown">👑</div>
-
-    <div class="avatar" aria-hidden="true">긍</div>
-    <!-- 실제 사진으로 교체하려면 위 div를
-         <img class="avatar" src="streamer-photo.jpg" alt="긍랑" style="object-fit:cover;">
-         로 바꿔주세요 -->
-
-    <p class="streamer-name">STREAMER · 긍랑</p>
-    <h1>팔로우 <span class="highlight">100</span> 달성 기념 🎊</h1>
-
-    <div class="counter-wrap">
-      <span class="counter" id="counter">0</span>
-      <span class="counter-label">팔로우</span>
-    </div>
-    <p class="subtitle">긍랑님과 함께한 모든 순간, 진심으로 축하드려요!</p>
-
-    <div class="buttons">
-      <button id="celebrateBtn">🎊 축하하기</button>
-      <button id="nextBtn">다음은..? →</button>
+  <main>
+    <div class="avatar-wrap">
+      <div class="avatar"><span>긍</span></div>
+      <div class="avatar-badge">⭐</div>
     </div>
 
-    <div class="progress-section" id="progressSection">
-      <p class="progress-title">다음 목표를 향해!</p>
-      <div class="progress-wrap" id="progressWrap">
-        <div class="progress-track-bg">
-          <div class="progress-fill" id="progressFill">
-            <span>100</span>
-          </div>
-          <div class="goal-marker" id="goalMarker">🎯 다음 목표 150</div>
-        </div>
+    <h1 class="name">긍랑</h1>
+
+    <div class="bar-wrap" id="barWrap">
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+      </div>
+      <div class="bar-labels">
+        <span>0</span>
+        <span class="goal-value" id="goalValue">100</span>
       </div>
     </div>
-  </main>
 
-  <footer>Made with 💛 for 긍랑</footer>
+    <div class="actions">
+      <button id="celebrateBtn" aria-label="축하하기">🎉</button>
+      <button id="nextBtn">다음은..? →</button>
+    </div>
+  </main>
 
 <script>
 (function(){
   "use strict";
 
-  /* ---------- ambient sparkles ---------- */
-  var sparkleField = document.getElementById('sparkleField');
-  var sparkleEmojis = ['✨','🎈','⭐','💫'];
-  var sparkleCount = 22;
-  for (var i = 0; i < sparkleCount; i++){
-    var el = document.createElement('span');
-    el.className = 'sparkle';
-    el.textContent = sparkleEmojis[Math.floor(Math.random()*sparkleEmojis.length)];
-    var left = Math.random()*100;
-    var duration = 9 + Math.random()*10;
-    var delay = Math.random()*14;
-    var driftX = (Math.random()*160 - 80) + 'px';
-    el.style.left = left + 'vw';
-    el.style.setProperty('--drift-x', driftX);
-    el.style.animationDuration = duration + 's';
-    el.style.animationDelay = delay + 's';
-    el.style.fontSize = (1 + Math.random()*1.2) + 'rem';
-    sparkleField.appendChild(el);
-  }
-
-  /* ---------- counter animation ---------- */
-  var counterEl = document.getElementById('counter');
+  /* ---------- bar fill count-up on load ---------- */
+  var barFill = document.getElementById('barFill');
+  var goalValue = document.getElementById('goalValue');
+  var current = 100;
   var target = 100;
-  var duration = 1600;
-  var startTime = null;
 
-  function easeOutExpo(t){
-    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  function updateBarFill(){
+    barFill.style.width = Math.min(current / target * 100, 100) + '%';
   }
 
-  function stepCount(ts){
-    if (startTime === null) startTime = ts;
-    var progress = Math.min((ts - startTime) / duration, 1);
-    var eased = easeOutExpo(progress);
-    counterEl.textContent = Math.round(eased * target);
-    if (progress < 1){
-      requestAnimationFrame(stepCount);
-    } else {
-      counterEl.textContent = target;
-    }
-  }
-  requestAnimationFrame(stepCount);
+  requestAnimationFrame(function(){
+    requestAnimationFrame(updateBarFill);
+  });
 
   /* ---------- confetti ---------- */
   var canvas = document.getElementById('confetti-canvas');
   var ctx = canvas.getContext('2d');
   var particles = [];
-  var confettiColors = ['#ffd166','#ff5da2','#8fe3ff','#a78bfa','#ffb703','#ffffff'];
+  var confettiColors = ['#00ffa3','#80e7fc','#a9c5ff','#ffffff','#ffd166','#ff5da2'];
   var animRunning = false;
 
   function resizeCanvas(){
@@ -549,12 +404,26 @@
     }
   });
 
-  /* ---------- next button / progress bar ---------- */
-  var progressSection = document.getElementById('progressSection');
-  var progressWrap = document.getElementById('progressWrap');
-  var progressFill = document.getElementById('progressFill');
-  var goalMarker = document.getElementById('goalMarker');
+  /* ---------- next button / progress bar growth ---------- */
+  var barWrap = document.getElementById('barWrap');
   var nextTriggered = false;
+
+  function tweenGoalLabel(from, to, ms){
+    var start = null;
+    goalValue.classList.add('bump');
+    function step(ts){
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / ms, 1);
+      goalValue.textContent = Math.round(from + (to - from) * p);
+      if (p < 1){
+        requestAnimationFrame(step);
+      } else {
+        goalValue.textContent = to;
+        setTimeout(function(){ goalValue.classList.remove('bump'); }, 200);
+      }
+    }
+    requestAnimationFrame(step);
+  }
 
   nextBtn.addEventListener('click', function(){
     if (nextTriggered) return;
@@ -562,21 +431,17 @@
     nextBtn.disabled = true;
     nextBtn.textContent = '다음 목표 공개! 🎯';
 
-    progressSection.classList.add('show');
+    barWrap.classList.add('shake');
 
-    // let the section expand first, then shake + reveal the next goal
     setTimeout(function(){
-      progressWrap.classList.add('shake');
+      barWrap.classList.remove('shake');
+      // scale now goes up to 150; current stays pinned at 100
+      target = 150;
+      tweenGoalLabel(100, 150, 700);
+      updateBarFill();
 
-      setTimeout(function(){
-        progressWrap.classList.remove('shake');
-        // bar now represents scale up to 150; fill stays pinned at "100"
-        progressFill.style.width = (100 / 150 * 100) + '%';
-        goalMarker.classList.add('show');
-
-        spawnConfetti(window.innerWidth / 2, window.innerHeight * 0.55, 50);
-      }, 620);
-    }, 500);
+      spawnConfetti(window.innerWidth / 2, window.innerHeight * 0.55, 50);
+    }, 600);
   });
 
 })();
