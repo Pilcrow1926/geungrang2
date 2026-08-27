@@ -40,7 +40,16 @@ export default {
       );
 
       if (!res.ok) {
-        return jsonResponse({ error: "chzzk api " + res.status }, 502);
+        var detail = await res.text();
+        // 디버그용 정보 — Secret "값" 자체는 절대 안 보여주고, 등록이 됐는지(true/false)만 확인해요.
+        // 원인 파악되면 이 detail/hasClientId 등 필드는 다시 지워도 돼요.
+        return jsonResponse({
+          error: "chzzk api " + res.status,
+          detail: detail,
+          hasClientId: !!env.CLIENT_ID,
+          hasClientSecret: !!env.CLIENT_SECRET,
+          channelId: env.CHANNEL_ID || null
+        }, 502);
       }
 
       var data = await res.json();
