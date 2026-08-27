@@ -457,11 +457,11 @@
   var goalValue = document.getElementById('goalValue');
   var currentMarker = document.getElementById('currentMarker');
   var currentMarkerValue = document.getElementById('currentMarkerValue');
-  var current = window.FollowerData.getCurrent();
-  var target = current; // 처음엔 목표 = 현재 값 (바가 꽉 찬 상태)
+  var target = window.FollowerData.getCurrent(); // 처음엔 목표 = 현재 값 (바가 꽉 찬 상태)
+  var nextTriggered = false;
 
   goalValue.textContent = target;
-  currentMarkerValue.textContent = current;
+  currentMarkerValue.textContent = window.FollowerData.getCurrent();
 
   // 점선 위치는 바로 잡아두되(숨긴 채로), 실제로 보여주는 건 바 채움 애니메이션이
   // 완전히 끝난 뒤(transitionend)로 미뤄서 다른 애니메이션과 겹치지 않게 해요.
@@ -489,6 +489,18 @@
 
   requestAnimationFrame(function(){
     requestAnimationFrame(updateBarFill);
+  });
+
+  // 실시간 팔로워 수(예: chzzk.js)가 바뀌면 여기로 알림이 와요.
+  window.FollowerData.onChange(function(newCurrent){
+    currentMarkerValue.textContent = newCurrent;
+    // "다음은..?"을 아직 누르지 않았다면 목표를 현재 값에 그대로 맞춰서
+    // 바가 항상 꽉 찬 상태로 실시간 성장을 보여줘요.
+    if (!nextTriggered){
+      target = newCurrent;
+      goalValue.textContent = target;
+    }
+    updateBarFill();
   });
 
   /* ---------- confetti ---------- */
@@ -602,7 +614,6 @@
 
   /* ---------- next button / progress bar growth ---------- */
   var barWrap = document.getElementById('barWrap');
-  var nextTriggered = false;
 
   function tweenGoalLabel(from, to, ms){
     var start = null;
@@ -643,5 +654,6 @@
 
 })();
 </script>
+<script src="chzzk.js"></script>
 </body>
 </html>
