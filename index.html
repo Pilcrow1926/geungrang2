@@ -958,7 +958,9 @@
       var value = easeOutExpo(p) * dayTarget;
       setReel(unitsStrip, value);
       setReel(tensStrip, value / 10);
-      setReel(hundredsStrip, value / 100);
+      // 백의 자리는 계속 슬금슬금 움직이지 않고, 전체 시간의 마지막 15%에서만 0->1로 굴러가요.
+      // (value는 easeOutExpo라 초반에 확 뛰어서 value 기준으로 나누면 너무 일찍 움직이므로, 선형 진행도인 p를 사용)
+      setReel(hundredsStrip, Math.max(0, Math.min((p - 0.85) / 0.15, 1)));
       updateDateForDay(value);
       htimelineFill.style.width = Math.min(value, 100) + '%';
       htimelineItems.forEach(function(item, i){
