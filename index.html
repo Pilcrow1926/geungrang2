@@ -948,14 +948,14 @@
 
   function startDayCounter(){
     var dayTarget = 100;
-    var duration = 2600;
+    var duration = 4200;
     var start = null;
     var revealed = [];
-    function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
     function step(ts){
       if (start === null) start = ts;
       var p = Math.min((ts - start) / duration, 1);
-      var value = easeOutExpo(p) * dayTarget;
+      var value = easeOutCubic(p) * dayTarget;
       setReel(unitsStrip, value);
       setReel(tensStrip, value / 10);
       // 백의 자리는 계속 슬금슬금 움직이지 않고, 전체 시간의 마지막 15%에서만 0->1로 굴러가요.
