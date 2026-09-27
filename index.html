@@ -262,7 +262,7 @@
     height:52px;
     border-radius:26px;
     font-size:1.6rem;
-    background:var(--green);
+    background:#ffffff;
     box-shadow:0 10px 24px rgba(0,60,40,0.28);
     display:flex;
     align-items:center;
@@ -271,7 +271,6 @@
   .celebrate-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
 
   #tabDday .celebrate-btn{
-    background:#ffffff;
     box-shadow:0 10px 24px rgba(120,0,60,0.3);
   }
   #tabDday .celebrate-btn:hover{
@@ -450,7 +449,7 @@
     right:4%;
     top:50%;
     height:2px;
-    background:rgba(255,255,255,0.35);
+    background:transparent;
     transform:translateY(-50%);
     overflow:hidden;
   }
@@ -612,10 +611,6 @@
     </div>
     <div class="day-counter-date" id="dayCounterDate">2026.06.23</div>
 
-    <div class="actions">
-      <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
-    </div>
-
     <div class="htimeline" id="htimeline">
       <div class="htimeline-line">
         <div class="htimeline-fill" id="htimelineFill"></div>
@@ -660,6 +655,10 @@
         <div class="htimeline-tick"></div>
         <div class="htimeline-dot"></div>
       </div>
+    </div>
+
+    <div class="actions">
+      <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
     </div>
   </main>
   </section>
@@ -948,17 +947,19 @@
 
   function startDayCounter(){
     var dayTarget = 100;
-    var duration = 2600;
+    var duration = 4200;
     var start = null;
     var revealed = [];
-    function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
     function step(ts){
       if (start === null) start = ts;
       var p = Math.min((ts - start) / duration, 1);
-      var value = easeOutExpo(p) * dayTarget;
+      var value = easeOutCubic(p) * dayTarget;
       setReel(unitsStrip, value);
       setReel(tensStrip, value / 10);
-      setReel(hundredsStrip, value / 100);
+      // 백의 자리는 계속 슬금슬금 움직이지 않고, 전체 시간의 마지막 15%에서만 0->1로 굴러가요.
+      // (value는 easeOutExpo라 초반에 확 뛰어서 value 기준으로 나누면 너무 일찍 움직이므로, 선형 진행도인 p를 사용)
+      setReel(hundredsStrip, Math.max(0, Math.min((p - 0.85) / 0.15, 1)));
       updateDateForDay(value);
       htimelineFill.style.width = Math.min(value, 100) + '%';
       htimelineItems.forEach(function(item, i){
