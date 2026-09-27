@@ -262,7 +262,7 @@
     height:52px;
     border-radius:26px;
     font-size:1.6rem;
-    background:var(--green);
+    background:#ffffff;
     box-shadow:0 10px 24px rgba(0,60,40,0.28);
     display:flex;
     align-items:center;
@@ -271,7 +271,6 @@
   .celebrate-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
 
   #tabDday .celebrate-btn{
-    background:#ffffff;
     box-shadow:0 10px 24px rgba(120,0,60,0.3);
   }
   #tabDday .celebrate-btn:hover{
@@ -450,7 +449,7 @@
     right:4%;
     top:50%;
     height:2px;
-    background:rgba(255,255,255,0.35);
+    background:transparent;
     transform:translateY(-50%);
     overflow:hidden;
   }
@@ -612,10 +611,6 @@
     </div>
     <div class="day-counter-date" id="dayCounterDate">2026.06.23</div>
 
-    <div class="actions">
-      <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
-    </div>
-
     <div class="htimeline" id="htimeline">
       <div class="htimeline-line">
         <div class="htimeline-fill" id="htimelineFill"></div>
@@ -660,6 +655,10 @@
         <div class="htimeline-tick"></div>
         <div class="htimeline-dot"></div>
       </div>
+    </div>
+
+    <div class="actions">
+      <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
     </div>
   </main>
   </section>
