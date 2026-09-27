@@ -47,7 +47,7 @@
     margin:0;
     padding:0;
     height:100%;
-    overflow-x:hidden;
+    overflow:hidden;
     color-scheme:light;
   }
 
@@ -57,8 +57,8 @@
     color:#ffffff;
     background:var(--bg-3);
     position:relative;
-    scrollbar-width:thin;
-    scrollbar-color:rgba(255,255,255,0.7) transparent;
+    display:flex;
+    flex-direction:column;
   }
 
   /* background-image(그라데이션)는 CSS transition으로 서로 보간되지 않아서,
@@ -81,31 +81,22 @@
   body.dday-active .bg-follow{ opacity:0; }
   body.dday-active .bg-dday{ opacity:1; }
 
-  /* ---------- custom scrollbar ---------- */
-  ::-webkit-scrollbar{
-    width:10px;
-  }
-  ::-webkit-scrollbar-track{
-    background:transparent;
-  }
-  ::-webkit-scrollbar-thumb{
-    background-color:rgba(255,255,255,0.7);
-    border-radius:999px;
-    border:2px solid transparent;
-    background-clip:padding-box;
-  }
-  ::-webkit-scrollbar-thumb:hover{
-    background-color:rgba(255,255,255,0.9);
+  .tab-panel{
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+    display:flex;
   }
 
   .hero{
     position:relative;
     z-index:2;
-    min-height:100vh;
+    width:100%;
     display:flex;
+    flex-direction:column;
     align-items:center;
-    justify-content:center;
-    padding:32px 20px;
+    padding:24px 20px 12px;
+    overflow:hidden;
   }
 
   main{
@@ -137,7 +128,7 @@
   /* 투명 배경 사진을 넣어도 각 탭 배경과 자연스럽게 어울리도록,
      원 안쪽 배경을 그 탭의 그라데이션 색으로 맞춰요. */
   #tabFollow .avatar{
-    background:linear-gradient(135deg, var(--bg-2), var(--bg-3));
+    background:linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
   }
   #tabDday .avatar{
     background:linear-gradient(135deg, var(--dday-bg-1), var(--dday-bg-3));
@@ -279,6 +270,14 @@
   }
   .celebrate-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
 
+  #tabDday .celebrate-btn{
+    background:#ffffff;
+    box-shadow:0 10px 24px rgba(120,0,60,0.3);
+  }
+  #tabDday .celebrate-btn:hover{
+    box-shadow:0 14px 28px rgba(120,0,60,0.4);
+  }
+
   #nextBtn{
     height:52px;
     max-width:0;
@@ -344,12 +343,31 @@
   .tab-bar{
     position:relative;
     z-index:3;
+    flex-shrink:0;
     display:flex;
     justify-content:center;
-    gap:8px;
-    padding:18px 16px 0;
+    padding:18px 16px 12px;
+  }
+  .tab-bar-track{
+    position:relative;
+    display:inline-flex;
+    background:rgba(255,255,255,0.18);
+    border-radius:999px;
+    padding:4px;
+  }
+  .tab-thumb{
+    position:absolute;
+    top:4px;
+    bottom:4px;
+    left:0;
+    width:0;
+    background:#ffffff;
+    border-radius:999px;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1), width .35s cubic-bezier(.34,1.56,.64,1);
   }
   .tab-btn{
+    position:relative;
+    z-index:1;
     font-family:var(--font-body);
     font-weight:600;
     font-size:0.92rem;
@@ -357,15 +375,12 @@
     border-radius:999px;
     border:none;
     cursor:pointer;
-    background:rgba(255,255,255,0.18);
+    background:transparent;
     color:#ffffff;
-    transition:background .2s ease, color .2s ease, transform .15s ease;
+    transition:color .2s ease;
   }
-  .tab-btn:hover{ transform:translateY(-1px); }
-  .tab-btn.active{
-    background:#ffffff;
-    color:#049966;
-  }
+  #tabBtnFollow.active{ color:#049966; }
+  #tabBtnDday.active{ color:#fd0254; }
   .tab-panel[hidden]{
     display:none;
   }
@@ -376,18 +391,45 @@
     align-items:baseline;
     justify-content:center;
     gap:8px;
-    margin:6px 0 28px;
+    margin:4px 0 0;
   }
-  .day-counter{
-    font-size:clamp(3rem, 11vw, 4.2rem);
+  .odometer{
+    display:flex;
+  }
+  .odometer-digit{
+    height:1.15em;
+    overflow:hidden;
+    position:relative;
+    font-size:clamp(2.4rem, 8vw, 3.4rem);
     font-weight:600;
-    font-variant-numeric:tabular-nums;
-    line-height:1;
+    line-height:1.15em;
+    width:0.68em;
   }
-  .day-counter-label{
-    font-size:1.2rem;
+  .odometer-strip{
+    display:flex;
+    flex-direction:column;
+    will-change:transform;
+  }
+  .odometer-strip span{
+    height:1.15em;
+    line-height:1.15em;
+    text-align:center;
+    font-variant-numeric:tabular-nums;
+  }
+  .day-counter-date{
+    font-size:0.95rem;
     font-weight:600;
     opacity:0.85;
+    margin:6px 0 10px;
+    font-variant-numeric:tabular-nums;
+  }
+  .day-counter-label{
+    font-size:1.1rem;
+    font-weight:600;
+    opacity:0.85;
+  }
+  #tabDday .actions{
+    margin-top:8px;
   }
 
   /* ---------- 100일 기념: 가로 타임라인 ---------- */
@@ -395,10 +437,9 @@
     position:relative;
     width:100%;
     max-width:440px;
-    height:160px;
-    margin:44px auto 10px;
-    opacity:0;
-    transition:opacity .5s ease;
+    height:150px;
+    margin:20px auto 0;
+    opacity:1;
   }
   .htimeline.show{
     opacity:1;
@@ -409,8 +450,17 @@
     right:4%;
     top:50%;
     height:2px;
-    background:rgba(255,255,255,0.4);
+    background:rgba(255,255,255,0.35);
     transform:translateY(-50%);
+    overflow:hidden;
+  }
+  .htimeline-fill{
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:0%;
+    background:#ffffff;
   }
   .htimeline-item{
     position:absolute;
@@ -491,8 +541,11 @@
   <canvas id="confetti-canvas"></canvas>
 
   <div class="tab-bar">
-    <button class="tab-btn" id="tabBtnFollow" data-tab="follow">팔로우 100</button>
-    <button class="tab-btn active" id="tabBtnDday" data-tab="dday">100일 기념</button>
+    <div class="tab-bar-track" id="tabBarTrack">
+      <div class="tab-thumb" id="tabThumb"></div>
+      <button class="tab-btn" id="tabBtnFollow" data-tab="follow">100팔</button>
+      <button class="tab-btn active" id="tabBtnDday" data-tab="dday">100일</button>
+    </div>
   </div>
 
   <div id="tabFollow" class="tab-panel" hidden>
@@ -550,17 +603,24 @@
     <h1 class="name">긍랑</h1>
 
     <div class="day-counter-wrap">
-      <span class="day-counter" id="dayCounter">0</span>
+      <div class="odometer" id="dayOdometer">
+        <div class="odometer-digit" id="odoHundreds"></div>
+        <div class="odometer-digit" id="odoTens"></div>
+        <div class="odometer-digit" id="odoUnits"></div>
+      </div>
       <span class="day-counter-label">일</span>
     </div>
+    <div class="day-counter-date" id="dayCounterDate">2026.06.23</div>
 
     <div class="actions">
       <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
     </div>
 
     <div class="htimeline" id="htimeline">
-      <div class="htimeline-line"></div>
-      <div class="htimeline-item up" style="left:8%">
+      <div class="htimeline-line">
+        <div class="htimeline-fill" id="htimelineFill"></div>
+      </div>
+      <div class="htimeline-item up" data-percent="0" style="left:6%">
         <div class="htimeline-label">
           <div class="htimeline-date">2026.06.23</div>
           <div class="htimeline-desc">첫 방송</div>
@@ -568,7 +628,7 @@
         <div class="htimeline-tick"></div>
         <div class="htimeline-dot"></div>
       </div>
-      <div class="htimeline-item down" style="left:37%">
+      <div class="htimeline-item down" data-percent="25" style="left:27.5%">
         <div class="htimeline-dot"></div>
         <div class="htimeline-tick"></div>
         <div class="htimeline-label">
@@ -576,7 +636,7 @@
           <div class="htimeline-desc">50팔 달성</div>
         </div>
       </div>
-      <div class="htimeline-item up" style="left:63%">
+      <div class="htimeline-item up" data-percent="50" style="left:50%">
         <div class="htimeline-label">
           <div class="htimeline-date">2026.08.11</div>
           <div class="htimeline-desc">50일</div>
@@ -584,13 +644,21 @@
         <div class="htimeline-tick"></div>
         <div class="htimeline-dot"></div>
       </div>
-      <div class="htimeline-item down" style="left:92%">
+      <div class="htimeline-item down" data-percent="75" style="left:72.5%">
         <div class="htimeline-dot"></div>
         <div class="htimeline-tick"></div>
         <div class="htimeline-label">
           <div class="htimeline-date">2026.08.27</div>
           <div class="htimeline-desc">100팔 달성</div>
         </div>
+      </div>
+      <div class="htimeline-item up" data-percent="100" style="left:94%">
+        <div class="htimeline-label">
+          <div class="htimeline-date">2026.09.30</div>
+          <div class="htimeline-desc">100일</div>
+        </div>
+        <div class="htimeline-tick"></div>
+        <div class="htimeline-dot"></div>
       </div>
     </div>
   </main>
@@ -799,20 +867,35 @@
 
   /* ---------- tab switching ---------- */
   var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabBarTrack = document.getElementById('tabBarTrack');
+  var tabThumb = document.getElementById('tabThumb');
   var tabPanels = {
     follow: document.getElementById('tabFollow'),
     dday: document.getElementById('tabDday')
   };
   var ddayStarted = false;
 
+  function moveTabThumb(btn){
+    var trackRect = tabBarTrack.getBoundingClientRect();
+    var btnRect = btn.getBoundingClientRect();
+    tabThumb.style.width = btnRect.width + 'px';
+    tabThumb.style.transform = 'translateX(' + (btnRect.left - trackRect.left) + 'px)';
+  }
+
   // 기본으로 열려있는 탭이 "100일 기념"이라 카운터를 바로 시작해요.
   ddayStarted = true;
   startDayCounter();
+  moveTabThumb(document.getElementById('tabBtnDday'));
+  // 폰트가 늦게 로드돼서 버튼 너비가 바뀌는 경우를 대비해 한 번 더 보정해요.
+  window.addEventListener('load', function(){
+    moveTabThumb(document.querySelector('.tab-btn.active'));
+  });
 
   tabBtns.forEach(function(btn){
     btn.addEventListener('click', function(){
       var key = btn.getAttribute('data-tab');
       tabBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      moveTabThumb(btn);
       Object.keys(tabPanels).forEach(function(k){
         tabPanels[k].hidden = (k !== key);
       });
@@ -824,31 +907,82 @@
     });
   });
 
-  /* ---------- 100일 기념: 카운터 (천천히 0 -> 100) ---------- */
-  var dayCounter = document.getElementById('dayCounter');
+  /* ---------- 100일 기념: 오도미터 카운터 + 날짜 + 가로 바 채움 + 노드 등장을 하나로 동기화 ---------- */
+  var htimeline = document.getElementById('htimeline');
+  var htimelineFill = document.getElementById('htimelineFill');
+  var htimelineItems = htimeline.querySelectorAll('.htimeline-item');
+  var dayCounterDate = document.getElementById('dayCounterDate');
+  var START_DATE = new Date(2026, 5, 23); // 첫 방송일 (day 0)
+
+  function buildOdometerStrip(container, repeatCount){
+    var strip = document.createElement('div');
+    strip.className = 'odometer-strip';
+    for (var r = 0; r < repeatCount; r++){
+      for (var d = 0; d <= 9; d++){
+        var span = document.createElement('span');
+        span.textContent = d;
+        strip.appendChild(span);
+      }
+    }
+    container.appendChild(strip);
+    return strip;
+  }
+  var hundredsStrip = buildOdometerStrip(document.getElementById('odoHundreds'), 1);
+  var tensStrip = buildOdometerStrip(document.getElementById('odoTens'), 2);
+  var unitsStrip = buildOdometerStrip(document.getElementById('odoUnits'), 11);
+
+  function setReel(strip, offset){
+    strip.style.transform = 'translateY(-' + (offset * 1.15) + 'em)';
+  }
+
+  function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+  function formatDate(d){
+    return d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate());
+  }
+  function updateDateForDay(dayValue){
+    var d = new Date(START_DATE);
+    // 카운터가 "100"을 보여줄 때 실제 100일째(9/30)와 맞도록 0~99일로 환산
+    d.setDate(d.getDate() + Math.round(dayValue * 99 / 100));
+    dayCounterDate.textContent = formatDate(d);
+  }
+
   function startDayCounter(){
     var dayTarget = 100;
-    var duration = 2400;
+    var duration = 2600;
     var start = null;
+    var revealed = [];
     function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
     function step(ts){
       if (start === null) start = ts;
       var p = Math.min((ts - start) / duration, 1);
-      dayCounter.textContent = Math.round(easeOutExpo(p) * dayTarget);
+      var value = easeOutExpo(p) * dayTarget;
+      setReel(unitsStrip, value);
+      setReel(tensStrip, value / 10);
+      setReel(hundredsStrip, value / 100);
+      updateDateForDay(value);
+      htimelineFill.style.width = Math.min(value, 100) + '%';
+      htimelineItems.forEach(function(item, i){
+        var itemPercent = parseFloat(item.getAttribute('data-percent'));
+        if (!revealed[i] && value >= itemPercent){
+          revealed[i] = true;
+          item.classList.add('show');
+        }
+      });
       if (p < 1){
         requestAnimationFrame(step);
       } else {
-        dayCounter.textContent = dayTarget;
+        setReel(unitsStrip, dayTarget);
+        setReel(tensStrip, dayTarget / 10);
+        setReel(hundredsStrip, dayTarget / 100);
+        updateDateForDay(dayTarget);
+        htimelineFill.style.width = '100%';
       }
     }
     requestAnimationFrame(step);
   }
 
-  /* ---------- 100일 기념: 축하 버튼 → 가로 타임라인이 선과 함께 하나씩 등장 ---------- */
+  /* ---------- 100일 기념: 축하 버튼 → 컨페티 ---------- */
   var ddayCelebrateBtn = document.getElementById('ddayCelebrateBtn');
-  var htimeline = document.getElementById('htimeline');
-  var htimelineItems = htimeline.querySelectorAll('.htimeline-item');
-  var ddayCelebrated = false;
 
   ddayCelebrateBtn.addEventListener('click', function(){
     var rect = ddayCelebrateBtn.getBoundingClientRect();
@@ -858,16 +992,6 @@
     spawnConfetti(originX, originY, 140);
     spawnConfetti(window.innerWidth * 0.15, window.innerHeight * 0.2, 60);
     spawnConfetti(window.innerWidth * 0.85, window.innerHeight * 0.2, 60);
-
-    if (!ddayCelebrated){
-      ddayCelebrated = true;
-      htimeline.classList.add('show');
-      htimelineItems.forEach(function(item, i){
-        setTimeout(function(){
-          item.classList.add('show');
-        }, 150 * i);
-      });
-    }
   });
 
 })();
