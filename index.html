@@ -153,7 +153,7 @@
     height:100%;
     object-fit:cover;
   }
-  /* assets/geungrang2.png 파일이 있으면 자동으로 사진이 뜨고,
+  /* assets/geungrang3.png 파일이 있으면 자동으로 사진이 뜨고,
      없으면 위 "긍" 글자가 대신 보여요 */
   .name{
     font-family:var(--font-title);
@@ -483,7 +483,7 @@
   }
 </style>
 </head>
-<body>
+<body class="dday-active">
 
   <div class="bg-layer bg-follow"></div>
   <div class="bg-layer bg-dday"></div>
@@ -491,17 +491,17 @@
   <canvas id="confetti-canvas"></canvas>
 
   <div class="tab-bar">
-    <button class="tab-btn active" id="tabBtnFollow" data-tab="follow">팔로우 100</button>
-    <button class="tab-btn" id="tabBtnDday" data-tab="dday">100일 기념</button>
+    <button class="tab-btn" id="tabBtnFollow" data-tab="follow">팔로우 100</button>
+    <button class="tab-btn active" id="tabBtnDday" data-tab="dday">100일 기념</button>
   </div>
 
-  <div id="tabFollow" class="tab-panel">
+  <div id="tabFollow" class="tab-panel" hidden>
   <section class="hero">
   <main>
     <div class="avatar-wrap">
       <div class="avatar">
         <span id="avatarFallback">긍</span>
-        <img id="avatarPhoto" class="avatar-photo" src="assets/geungrang2.png" alt="긍랑"
+        <img id="avatarPhoto" class="avatar-photo" src="assets/geungrang3.png" alt="긍랑"
              onload="document.getElementById('avatarFallback').style.display='none'; this.style.display='block';"
              onerror="this.style.display='none';">
       </div>
@@ -535,13 +535,13 @@
   </section>
   </div>
 
-  <div id="tabDday" class="tab-panel" hidden>
+  <div id="tabDday" class="tab-panel">
   <section class="hero">
   <main>
     <div class="avatar-wrap">
       <div class="avatar">
         <span>긍</span>
-        <img class="avatar-photo" src="assets/geungrang2.png" alt="긍랑"
+        <img class="avatar-photo" src="assets/geungrang3.png" alt="긍랑"
              onload="this.previousElementSibling.style.display='none'; this.style.display='block';"
              onerror="this.style.display='none';">
       </div>
@@ -804,6 +804,10 @@
     dday: document.getElementById('tabDday')
   };
   var ddayStarted = false;
+
+  // 기본으로 열려있는 탭이 "100일 기념"이라 카운터를 바로 시작해요.
+  ddayStarted = true;
+  startDayCounter();
 
   tabBtns.forEach(function(btn){
     btn.addEventListener('click', function(){
