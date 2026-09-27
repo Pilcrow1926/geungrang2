@@ -32,6 +32,9 @@
     --bg-1:#00ffa3;
     --bg-2:#80e7fc;
     --bg-3:#a9c5ff;
+    --dday-bg-1:#bb4bd6;
+    --dday-bg-2:#fd0254;
+    --dday-bg-3:#ff8e3e;
     --green:#00e08a;
     --white:#ffffff;
     --font-title:'Cafe24Anemone','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
@@ -57,6 +60,11 @@
     position:relative;
     scrollbar-width:thin;
     scrollbar-color:rgba(255,255,255,0.7) transparent;
+    transition:background 0.6s ease;
+  }
+  body.dday-active{
+    background:linear-gradient(135deg, var(--dday-bg-1) 0%, var(--dday-bg-2) 50%, var(--dday-bg-3) 100%);
+    background-attachment:fixed;
   }
 
   /* ---------- custom scrollbar ---------- */
@@ -780,6 +788,7 @@
       Object.keys(tabPanels).forEach(function(k){
         tabPanels[k].hidden = (k !== key);
       });
+      document.body.classList.toggle('dday-active', key === 'dday');
       if (key === 'dday' && !ddayStarted){
         ddayStarted = true;
         startDayCounter();
