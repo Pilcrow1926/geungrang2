@@ -237,7 +237,7 @@
   }
   button:active{ transform:translateY(1px) scale(0.97); }
 
-  #celebrateBtn{
+  .celebrate-btn{
     width:68px;
     height:52px;
     border-radius:26px;
@@ -248,7 +248,7 @@
     align-items:center;
     justify-content:center;
   }
-  #celebrateBtn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
+  .celebrate-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,60,40,0.35); }
 
   #nextBtn{
     height:52px;
@@ -311,70 +311,137 @@
     opacity:1;
   }
 
-  /* ---------- timeline ---------- */
-  .timeline-section{
+  /* ---------- tab bar ---------- */
+  .tab-bar{
     position:relative;
-    z-index:2;
-    width:min(480px, 88vw);
-    margin:0 auto;
-    max-height:0;
+    z-index:3;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:18px 16px 0;
+  }
+  .tab-btn{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.92rem;
+    padding:9px 18px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    background:rgba(255,255,255,0.18);
+    color:#ffffff;
+    transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .tab-btn:hover{ transform:translateY(-1px); }
+  .tab-btn.active{
+    background:#ffffff;
+    color:#049966;
+  }
+  .tab-panel[hidden]{
+    display:none;
+  }
+
+  /* ---------- 100일 기념: 카운터 ---------- */
+  .day-counter-wrap{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:8px;
+    margin:6px 0 28px;
+  }
+  .day-counter{
+    font-size:clamp(3rem, 11vw, 4.2rem);
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+    line-height:1;
+  }
+  .day-counter-label{
+    font-size:1.2rem;
+    font-weight:600;
+    opacity:0.85;
+  }
+
+  /* ---------- 100일 기념: 가로 타임라인 ---------- */
+  .htimeline{
+    position:relative;
+    width:100%;
+    max-width:440px;
+    height:160px;
+    margin:44px auto 10px;
     opacity:0;
-    overflow:hidden;
-    padding-top:0;
-    transition:max-height .8s ease, opacity .6s ease .1s, padding-top .8s ease;
+    transition:opacity .5s ease;
   }
-  .timeline-section.show{
-    max-height:600px;
+  .htimeline.show{
     opacity:1;
-    padding-top:10px;
   }
-  .timeline-title{
-    font-size:0.85rem;
-    letter-spacing:0.16em;
-    opacity:0.8;
-    margin:0 0 20px;
-    text-align:center;
-  }
-  .timeline-list{
-    position:relative;
-    text-align:left;
-    padding-left:24px;
-    padding-bottom:40px;
-  }
-  .timeline-list::before{
-    content:"";
+  .htimeline-line{
     position:absolute;
-    left:5px;
-    top:6px;
-    bottom:10px;
-    width:2px;
-    background:rgba(255,255,255,0.45);
+    left:4%;
+    right:4%;
+    top:50%;
+    height:2px;
+    background:rgba(255,255,255,0.4);
+    transform:translateY(-50%);
   }
-  .timeline-item{
-    position:relative;
-    padding-bottom:26px;
-  }
-  .timeline-item:last-child{
-    padding-bottom:0;
-  }
-  .timeline-item::before{
-    content:"";
+  .htimeline-item{
     position:absolute;
-    left:-24px;
-    top:4px;
-    width:12px;
-    height:12px;
+    top:50%;
+    width:104px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transform:translate(-50%, -50%) scale(0.5);
+    opacity:0;
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
+  }
+  .htimeline-item.show{
+    opacity:1;
+  }
+  .htimeline-item.up{
+    top:auto;
+    bottom:50%;
+    transform:translate(-50%, 0) scale(0.5);
+  }
+  .htimeline-item.up.show{
+    transform:translate(-50%, 0) scale(1);
+  }
+  .htimeline-item.down{
+    transform:translate(-50%, 0) scale(0.5);
+  }
+  .htimeline-item.down.show{
+    transform:translate(-50%, 0) scale(1);
+  }
+  .htimeline-item.up .htimeline-label{ order:1; margin-bottom:6px; }
+  .htimeline-item.up .htimeline-tick{ order:2; }
+  .htimeline-item.up .htimeline-dot{ order:3; }
+  .htimeline-item.down .htimeline-dot{ order:1; }
+  .htimeline-item.down .htimeline-tick{ order:2; }
+  .htimeline-item.down .htimeline-label{ order:3; margin-top:6px; }
+  .htimeline-dot{
+    width:10px;
+    height:10px;
     border-radius:50%;
     background:#ffffff;
     box-shadow:0 0 0 4px rgba(255,255,255,0.25);
+    flex-shrink:0;
   }
-  .timeline-date{
-    font-size:0.85rem;
+  .htimeline-tick{
+    width:2px;
+    height:16px;
+    background:rgba(255,255,255,0.5);
+    flex-shrink:0;
+  }
+  .htimeline-label{
+    text-align:center;
+  }
+  .htimeline-date{
+    font-size:0.75rem;
     opacity:0.85;
-    margin-bottom:4px;
+    white-space:nowrap;
   }
-  .timeline-desc{
-    font-size:1.05rem;
+  .htimeline-desc{
+    font-size:0.92rem;
+    margin-top:2px;
   }
 
   canvas#confetti-canvas{
@@ -391,6 +458,12 @@
 
   <canvas id="confetti-canvas"></canvas>
 
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabBtnFollow" data-tab="follow">팔로우 100</button>
+    <button class="tab-btn" id="tabBtnDday" data-tab="dday">100일 기념</button>
+  </div>
+
+  <div id="tabFollow" class="tab-panel">
   <section class="hero">
   <main>
     <div class="avatar-wrap">
@@ -423,29 +496,74 @@
     </div>
 
     <div class="actions">
-      <button id="celebrateBtn" aria-label="축하하기">🎉</button>
+      <button id="celebrateBtn" class="celebrate-btn" aria-label="축하하기">🎉</button>
       <button id="nextBtn">다음은..? →</button>
     </div>
   </main>
   </section>
+  </div>
 
-  <section class="timeline-section" id="timelineSection">
-    <p class="timeline-title">TIMELINE</p>
-    <div class="timeline-list">
-      <div class="timeline-item">
-        <div class="timeline-date">2026.06.23</div>
-        <div class="timeline-desc">첫 방송일</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">2026.08.06</div>
-        <div class="timeline-desc">50팔 달성!</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">2026.08.27</div>
-        <div class="timeline-desc">100팔 달성!</div>
+  <div id="tabDday" class="tab-panel" hidden>
+  <section class="hero">
+  <main>
+    <div class="avatar-wrap">
+      <div class="avatar">
+        <span>긍</span>
+        <img class="avatar-photo" src="assets/geungrang2.png" alt="긍랑"
+             onload="this.previousElementSibling.style.display='none'; this.style.display='block';"
+             onerror="this.style.display='none';">
       </div>
     </div>
+
+    <h1 class="name">긍랑</h1>
+
+    <div class="day-counter-wrap">
+      <span class="day-counter" id="dayCounter">0</span>
+      <span class="day-counter-label">일</span>
+    </div>
+
+    <div class="actions">
+      <button id="ddayCelebrateBtn" class="celebrate-btn" aria-label="100일 기념하기">🎉</button>
+    </div>
+
+    <div class="htimeline" id="htimeline">
+      <div class="htimeline-line"></div>
+      <div class="htimeline-item up" style="left:8%">
+        <div class="htimeline-label">
+          <div class="htimeline-date">2026.06.23</div>
+          <div class="htimeline-desc">첫 방송</div>
+        </div>
+        <div class="htimeline-tick"></div>
+        <div class="htimeline-dot"></div>
+      </div>
+      <div class="htimeline-item down" style="left:37%">
+        <div class="htimeline-dot"></div>
+        <div class="htimeline-tick"></div>
+        <div class="htimeline-label">
+          <div class="htimeline-date">2026.08.06</div>
+          <div class="htimeline-desc">50팔 달성</div>
+        </div>
+      </div>
+      <div class="htimeline-item up" style="left:63%">
+        <div class="htimeline-label">
+          <div class="htimeline-date">2026.08.27</div>
+          <div class="htimeline-desc">100팔 달성</div>
+        </div>
+        <div class="htimeline-tick"></div>
+        <div class="htimeline-dot"></div>
+      </div>
+      <div class="htimeline-item down" style="left:92%">
+        <div class="htimeline-dot"></div>
+        <div class="htimeline-tick"></div>
+        <div class="htimeline-label">
+          <div class="htimeline-date">2026.09.27</div>
+          <div class="htimeline-desc">방송 100일</div>
+        </div>
+      </div>
+    </div>
+  </main>
   </section>
+  </div>
 
 <script src="followers.js"></script>
 <script>
@@ -588,7 +706,6 @@
   /* ---------- celebrate button ---------- */
   var celebrateBtn = document.getElementById('celebrateBtn');
   var nextBtn = document.getElementById('nextBtn');
-  var timelineSection = document.getElementById('timelineSection');
   var hasCelebrated = false;
 
   celebrateBtn.addEventListener('click', function(){
@@ -604,7 +721,6 @@
     if (!hasCelebrated){
       hasCelebrated = true;
       nextBtn.classList.add('show');
-      timelineSection.classList.add('show');
     }
   });
 
@@ -647,6 +763,74 @@
 
       spawnConfetti(window.innerWidth / 2, window.innerHeight * 0.55, 50);
     }, 600);
+  });
+
+  /* ---------- tab switching ---------- */
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabPanels = {
+    follow: document.getElementById('tabFollow'),
+    dday: document.getElementById('tabDday')
+  };
+  var ddayStarted = false;
+
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.getAttribute('data-tab');
+      tabBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      Object.keys(tabPanels).forEach(function(k){
+        tabPanels[k].hidden = (k !== key);
+      });
+      if (key === 'dday' && !ddayStarted){
+        ddayStarted = true;
+        startDayCounter();
+      }
+    });
+  });
+
+  /* ---------- 100일 기념: 카운터 (천천히 0 -> 100) ---------- */
+  var dayCounter = document.getElementById('dayCounter');
+  function startDayCounter(){
+    var dayTarget = 100;
+    var duration = 2400;
+    var start = null;
+    function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function step(ts){
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      dayCounter.textContent = Math.round(easeOutExpo(p) * dayTarget);
+      if (p < 1){
+        requestAnimationFrame(step);
+      } else {
+        dayCounter.textContent = dayTarget;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- 100일 기념: 축하 버튼 → 가로 타임라인이 선과 함께 하나씩 등장 ---------- */
+  var ddayCelebrateBtn = document.getElementById('ddayCelebrateBtn');
+  var htimeline = document.getElementById('htimeline');
+  var htimelineItems = htimeline.querySelectorAll('.htimeline-item');
+  var ddayCelebrated = false;
+
+  ddayCelebrateBtn.addEventListener('click', function(){
+    var rect = ddayCelebrateBtn.getBoundingClientRect();
+    var originX = rect.left + rect.width / 2;
+    var originY = rect.top + rect.height / 2;
+
+    spawnConfetti(originX, originY, 140);
+    spawnConfetti(window.innerWidth * 0.15, window.innerHeight * 0.2, 60);
+    spawnConfetti(window.innerWidth * 0.85, window.innerHeight * 0.2, 60);
+
+    if (!ddayCelebrated){
+      ddayCelebrated = true;
+      htimeline.classList.add('show');
+      htimelineItems.forEach(function(item, i){
+        setTimeout(function(){
+          item.classList.add('show');
+        }, 150 * i);
+      });
+    }
   });
 
 })();
