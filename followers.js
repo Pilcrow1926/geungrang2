@@ -46,6 +46,7 @@ window.FollowerData = (function () {
     setCurrent: setCurrent,
     getMilestone: getMilestone,
     getNextGoal: getNextGoal,
+    getBaseMilestone: function () { return BASE_MILESTONE; },
     fillPercent: fillPercent,
     onChange: onChange
   };

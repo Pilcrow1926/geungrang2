@@ -276,6 +276,16 @@
   #tabDday .celebrate-btn:hover{
     box-shadow:0 14px 28px rgba(120,0,60,0.4);
   }
+  .celebrate-btn:disabled{
+    opacity:0.5;
+    cursor:default;
+    transform:none !important;
+    box-shadow:none;
+  }
+  .celebrate-btn:disabled:hover{
+    transform:none;
+    box-shadow:none;
+  }
 
   #nextBtn{
     height:52px;
@@ -722,6 +732,7 @@
       }
     }
     updateBarFill();
+    updateCelebrateAvailability();
   });
 
   /* ---------- confetti ---------- */
@@ -814,6 +825,15 @@
   var celebrateBtn = document.getElementById('celebrateBtn');
   var nextBtn = document.getElementById('nextBtn');
   var hasCelebrated = false;
+
+  // 실제 라이브 팔로워 수가 기본 목표(150)에 아직 못 미치면, 축하하기/다음은..? 버튼을
+  // 눌러도 의미가 없으니 비활성화해요.
+  function updateCelebrateAvailability(){
+    var reached = window.FollowerData.getCurrent() >= window.FollowerData.getBaseMilestone();
+    celebrateBtn.disabled = !reached;
+    nextBtn.disabled = !reached || nextTriggered;
+  }
+  updateCelebrateAvailability();
 
   celebrateBtn.addEventListener('click', function(){
     var rect = celebrateBtn.getBoundingClientRect();
