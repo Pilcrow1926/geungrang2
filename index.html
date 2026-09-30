@@ -542,7 +542,7 @@
   <div class="tab-bar">
     <div class="tab-bar-track" id="tabBarTrack">
       <div class="tab-thumb" id="tabThumb"></div>
-      <button class="tab-btn" id="tabBtnFollow" data-tab="follow">100팔</button>
+      <button class="tab-btn" id="tabBtnFollow" data-tab="follow">150팔</button>
       <button class="tab-btn active" id="tabBtnDday" data-tab="dday">100일</button>
     </div>
   </div>
@@ -563,7 +563,7 @@
 
     <div class="bar-wrap" id="barWrap">
       <div class="current-marker" id="currentMarker">
-        <span class="current-marker-value" id="currentMarkerValue">100</span>
+        <span class="current-marker-value" id="currentMarkerValue">150</span>
         <span class="current-marker-line"></span>
       </div>
       <div class="bar-track">
@@ -571,7 +571,7 @@
       </div>
       <div class="bar-labels">
         <span>0</span>
-        <span class="goal-value" id="goalValue">100</span>
+        <span class="goal-value" id="goalValue">150</span>
       </div>
     </div>
 
@@ -674,7 +674,7 @@
   var goalValue = document.getElementById('goalValue');
   var currentMarker = document.getElementById('currentMarker');
   var currentMarkerValue = document.getElementById('currentMarkerValue');
-  var target = window.FollowerData.getMilestone(); // 첫 화면: 고정된 달성 목표(100)
+  var target = window.FollowerData.getMilestone(); // 첫 화면: 달성 목표(기본 150, 실시간 값이 더 크면 그 값)
   var nextTriggered = false;
 
   goalValue.textContent = target;
@@ -709,10 +709,18 @@
   });
 
   // 실시간 팔로워 수(예: chzzk.js)가 바뀌면 여기로 알림이 와요.
-  // target(100 → "다음은..?" 이후엔 150)은 고정값 그대로 두고, 그 스케일 안에서
-  // 현재 실시간 값이 몇 %/몇 명인지만 바·점선에 반영해요.
+  // "다음은..?"을 아직 누르기 전이면, 실시간 값이 기본 목표(150)를 넘어설 때마다
+  // 목표 자체를 그 값으로 올려서 "더 많이 축하하는" 화면이 되도록 해요.
+  // 이미 다음 목표(예: 200)로 넘어간 뒤에는 그 목표를 그대로 유지해요.
   window.FollowerData.onChange(function(newCurrent){
     currentMarkerValue.textContent = newCurrent;
+    if (!nextTriggered){
+      var milestone = window.FollowerData.getMilestone();
+      if (milestone !== target){
+        target = milestone;
+        goalValue.textContent = target;
+      }
+    }
     updateBarFill();
   });
 
